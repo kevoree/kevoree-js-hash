@@ -35,6 +35,9 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+<<<<<<< HEAD
 
 # yarn lock
 yarn.lock
+=======
+>>>>>>> 35ba16a3f169049adbbc8ff1700223449a18157c
