@@ -1,47 +1,42 @@
+var path = require('path');
 var assert = require('assert');
-var hash = require('../hash');
+var kHash = require('../hash');
 
-describe('hash()', function () {
-
-	it('should be equal even if deps are not in same order', function () {
-		var h0 = hash('h', 'a', 'b', 'c', { d: 'e', f: 'g' });
-		var h1 = hash('h', 'a', 'b', 'c', { f: 'g', d: 'e' });
-		assert.equal(h0, h1);
+function assertHashesEquals(name, done) {
+	kHash(path.resolve('test', 'fixtures', name, name), function (err, hash0) {
+		if (err) {
+			done(err);
+		} else {
+			kHash(path.resolve('test', 'fixtures', name, 'npm-'+name), function (er, hash1) {
+				if (er) {
+					done(er);
+				} else {
+					assert.equal(hash0, hash1);
+					done();
+				}
+			});
+		}
 	});
+}
 
-	it('should differ when hash change', function () {
-		var h0 = hash('h', 'a', 'b', 'c', { d: 'e', f: 'g' });
-		var h1 = hash('h1', 'a', 'b', 'c', { f: 'g', d: 'e' });
-		assert.notEqual(h0, h1);
-	});
+describe('kHash()', function () {
+	describe('compare local & npm-installed projects', function () {
+		it('with no deps', function (done) {
+			assertHashesEquals('simple', done);
+		});
 
-	it('should differ when namespace change', function () {
-		var h0 = hash('h', 'a', 'b', 'c', { d: 'e', f: 'g' });
-		var h1 = hash('h', 'a1', 'b', 'c', { f: 'g', d: 'e' });
-		assert.notEqual(h0, h1);
-	});
+		it('with deps', function (done) {
+			assertHashesEquals('deps', done);
+		});
 
-	it('should differ when name change', function () {
-		var h0 = hash('h', 'a', 'b', 'c', { d: 'e', f: 'g' });
-		var h1 = hash('h', 'a', 'b1', 'c', { f: 'g', d: 'e' });
-		assert.notEqual(h0, h1);
-	});
+		it('with multiple deps', function (done) {
+			// deps are not in same order in local and in npm-installed
+			// to ensure that even in this case the hash is the same
+			assertHashesEquals('multiple-deps', done);
+		});
 
-	it('should differ when version change', function () {
-		var h0 = hash('h', 'a', 'b', 'c', { d: 'e', f: 'g' });
-		var h1 = hash('h', 'a', 'b', 'c1', { f: 'g', d: 'e' });
-		assert.notEqual(h0, h1);
-	});
-
-	it('should differ when deps change', function () {
-		var h0 = hash('h', 'a', 'b', 'c', { d: 'e', f: 'g' });
-		var h1 = hash('h', 'a', 'b', 'c', { f: 'g', d: 'e', 'a': 'b' });
-		assert.notEqual(h0, h1);
-	});
-
-	it('should be equal even if deps are empty', function () {
-		var h0 = hash('h', 'a', 'b', 'c', {});
-		var h1 = hash('h', 'a', 'b', 'c', {});
-		assert.equal(h0, h1);
+		it('with optDeps', function (done) {
+			assertHashesEquals('opt-deps', done);
+		});
 	});
 });

@@ -1,6 +1,6 @@
 {
   "name": "kevoree-hash",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Creates a hash based on Kevoree namespace, name, version and pkg-hash",
   "main": "hash.js",
   "scripts": {
@@ -32,5 +32,7 @@
     "eslint": "^3.11.1",
     "mocha": "^3.2.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "pkg-hash": "^2.2.1"
+  }
 }
