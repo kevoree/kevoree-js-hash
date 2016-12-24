@@ -1,42 +1,31 @@
 var path = require('path');
 var assert = require('assert');
-var kHash = require('../hash');
+var kHash = require('../kevoree-hash');
 
-function assertHashesEquals(name, done) {
-	kHash(path.resolve('test', 'fixtures', name, name), function (err, hash0) {
-		if (err) {
-			done(err);
-		} else {
-			kHash(path.resolve('test', 'fixtures', name, 'npm-'+name), function (er, hash1) {
-				if (er) {
-					done(er);
-				} else {
-					assert.equal(hash0, hash1);
-					done();
-				}
-			});
-		}
-	});
+function assertHashesEquals(name) {
+	var hash0 = kHash(path.resolve('test', 'fixtures', name, name));
+	var hash1 = kHash(path.resolve('test', 'fixtures', name, 'npm-'+name));
+	assert.equal(hash0, hash1);
 }
 
 describe('kHash()', function () {
 	describe('compare local & npm-installed projects', function () {
-		it('with no deps', function (done) {
-			assertHashesEquals('simple', done);
+		it('with no deps', function () {
+			assertHashesEquals('simple');
 		});
 
-		it('with deps', function (done) {
-			assertHashesEquals('deps', done);
+		it('with deps', function () {
+			assertHashesEquals('deps');
 		});
 
-		it('with multiple deps', function (done) {
+		it('with multiple deps', function () {
 			// deps are not in same order in local and in npm-installed
 			// to ensure that even in this case the hash is the same
-			assertHashesEquals('multiple-deps', done);
+			assertHashesEquals('multiple-deps');
 		});
 
-		it('with optDeps', function (done) {
-			assertHashesEquals('opt-deps', done);
+		it('with optDeps', function () {
+			assertHashesEquals('opt-deps');
 		});
 	});
 });

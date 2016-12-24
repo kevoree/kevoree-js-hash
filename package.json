@@ -1,8 +1,8 @@
 {
   "name": "kevoree-hash",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Creates a hash based on Kevoree namespace, name, version and pkg-hash",
-  "main": "hash.js",
+  "main": "kevoree-hash.js",
   "scripts": {
     "test": "mocha"
   },
@@ -33,6 +33,6 @@
     "mocha": "^3.2.0"
   },
   "dependencies": {
-    "pkg-hash": "^2.2.1"
+    "pkg-hash": "^3.0.0"
   }
 }
